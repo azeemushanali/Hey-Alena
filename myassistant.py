@@ -166,6 +166,11 @@ if __name__ == "__main__":
         elif 'the time' in command:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
+        elif 'play music' in command:
+            music_dir = 'Songs\\'
+            songs = os.listdir(music_dir)
+            print(songs)    
+            os.startfile(os.path.join(music_dir, songs[0]))
         else:
             el_str = "I have no idea what you are saying. Kindly try taking help by inputting help"
             print(el_str)
