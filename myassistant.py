@@ -1,0 +1,185 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Aug 20 15:52:49 2020
+
+@author: Azeemushan
+"""
+
+import pyttsx3
+import os
+import datetime
+import smtplib
+import wikipedia
+import webbrowser
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+# print(voices[1].id)
+engine.setProperty('voice', voices[0].id)
+
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+
+def wishMe():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("Good Morning! Azeemushan Ali")
+
+    elif hour>=12 and hour<18:
+        speak("Good Afternoon! Azeemushan Ali")   
+
+    else:
+        speak("Good Evening! Azeemushan Ali")  
+
+    speak("I am Jarvis Sir. Please tell me how may I help you")
+    
+#speak('Hello World')
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('youremail@gmail.com', 'your-password')
+    server.sendmail('youremail@gmail.com', to, content)
+    server.close()
+    
+#def initialise_win_env():
+#    os.system('pwd')
+#    os.popen('dir')
+    
+if __name__ == "__main__":
+#    wishMe()
+    icoulddo = "I could do following - \n*Open Chrome\n*Open Notepad\n*Open Your VS Code IDE\n*Send Email\n*Search anything in wikipedia\n*Search anything in Youtube"
+    while 1:
+        print(icoulddo)
+        speak(icoulddo.replace('*',' '))
+        print("So what do you want me to do?")
+        speak("So what do you want me to do?")
+        command = input().lower()
+#        command = command.lower()
+        if 'wikipedia' in command:
+            print('Searching Wikipedia...')
+            speak('Searching Wikipedia...')
+            command = command.replace('search ','')
+            command = command.replace('in wikipedia','')
+            results = wikipedia.summary(command, sentences=2)
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
+        elif 'youtube' in command and 'search' in command:
+            command = command.replace('search ','')
+            command = command.replace('in youtube','')
+            url = "https://www.youtube.com/results?search_query="
+            webbrowser.open(url+command)
+        elif 'search' in command and 'stackoverflow' in command:
+            command = command.replace('search ','')
+            command = command.replace('in stackoverflow','')
+            url = "https://stackoverflow.com/search?q="
+            webbrowser.open(url+command)
+        elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and 'chrome' in command:
+            path = '"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"'
+            os.system(path)
+        elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and 'notepad' in command:
+            os.system('notepad')
+        elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and ('ide' in command or 'vs code'in command or 'code' in command or 'vscode'in command ):
+            os.system('code')
+        elif 'creator' in command:
+            creator = "My Creatoris Azeemushan Ali. Connect with him on Linkedin "
+            speak(creator)
+            webbrowser.open('https://www.linkedin.com/in/azeemushan-ali/')
+        elif ('send email' in command):
+            try:
+                speak("What should I say?")
+                content = input("What should I say?\n")
+                speak("Please Enter the recipient email!")
+                to = input("Please Enter the recipient email!\n")    
+                sendEmail(to, content)
+                speak("Email has been sent!")
+            except Exception as e:
+                print(e)
+                speak("Sorry Sir !! . I am not able to send this email right now.Please try again later") 
+        elif 'shutup' in command or 'shutdown' in command or 'shut down' in command:
+            speak("I hope you liked me Sir!!")
+            speak('I am closing my services and shutting down')
+            speak('Have a nice day')
+        elif 'help' in command:
+            help_str= 'You want help for which command?'
+            speak(help_str)
+            help_cmd = input(help_str+'\n').lower()
+            if 'wikipedia' in help_cmd:
+                wiki_str = "Wikipedia command works like this - \n\
+                Input 'Search Python in wikipedia' and you will hear your results  "
+                print(wiki_str)
+                speak(wiki_str)
+            elif 'youtube' in help_cmd:
+                yt_str = "Youtube command works like this - \n\
+                Input 'Search Python Tutorials in youtube' and you will see your results soon "
+                print(yt_str)
+                speak(yt_str)
+            elif 'stackoverflow' in help_cmd:
+                yt_str = "Stakoverflow command works like this - \n\
+                Input 'Search how to solve index out of bound in stackoverflow' and you will see your results opening soon "
+                print(yt_str)
+                speak(yt_str)
+            elif 'email' in help_cmd:
+                email_str = "Send Email command works like this - \n\
+                Input 'Send Email' or 'I want to send email' and you will hear \
+                me to ask for the email content. Enter the email content \
+                and then I will ask you to whom you want to send email? \
+                Enter the email id of recipient and email will be sent !!"
+                print(email_str)
+                speak(email_str) 
+            elif 'chrome' in help_cmd:
+                chr_str = "Chrome command works like this - \n\
+                Input 'Open chrome' or 'Please launch chrome for me' and you will see chrome opening soon "
+                print(chr_str)
+                speak(chr_str)
+            elif 'notepad' in help_cmd:
+                chr_str = "Notepad command works like this - \n\
+                Input 'Open notepad' or 'Please launch notepad for me' and you will see notepad opening soon "
+                print(chr_str)
+                speak(chr_str)
+            elif 'ide' in help_cmd or 'vscode' in help_cmd or 'vs code' in help_cmd:
+                chr_str = "IDE command works like this - \n\
+                Input 'Open VS Code' or 'Please launch my IDE for me' and you will see VS Code opening soon "
+                print(chr_str)
+                speak(chr_str)
+            elif 'shutup' in help_cmd or 'shutdown' in help_cmd:
+                chr_str = "Shutup command works like this - \n\
+                Input 'Shutup' or 'Please Shut down' or 'will you please shut up!' or 'Get lost' and you will see me shutting down soon "
+                print(chr_str)
+                speak(chr_str)
+            elif 'time' in help_cmd:
+                chr_str = "Time command works like this - \n\
+                Input 'What is the time' or \
+                'Please tell me the time' or \
+                'will you please tell what time it is?'\
+                and you will hear me saying the excact time soon "
+                print(chr_str)
+                speak(chr_str)
+        elif 'the time' in command:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")    
+            speak(f"Sir, the time is {strTime}")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
