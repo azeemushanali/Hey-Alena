@@ -51,7 +51,8 @@ def sendEmail(to, content):
 if __name__ == "__main__":
 #    wishMe()
     icoulddo = "I could do following - \n*Open Chrome\n*Open Notepad\n*Open Your VS Code IDE\n*Send Email\n*Search anything in wikipedia\n*Search anything in Youtube"
-    while 1:
+    state = 'in'
+    while state == 'in':
         print(icoulddo)
         speak(icoulddo.replace('*',' '))
         print("So what do you want me to do?")
@@ -71,11 +72,13 @@ if __name__ == "__main__":
             command = command.replace('search ','')
             command = command.replace('in youtube','')
             url = "https://www.youtube.com/results?search_query="
+            speak('Launching your results in Chrome')
             webbrowser.open(url+command)
         elif 'search' in command and 'stackoverflow' in command:
             command = command.replace('search ','')
             command = command.replace('in stackoverflow','')
             url = "https://stackoverflow.com/search?q="
+            speak('Launching your results in Chrome')
             webbrowser.open(url+command)
         elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and 'chrome' in command:
             path = '"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"'
@@ -87,6 +90,7 @@ if __name__ == "__main__":
         elif 'creator' in command:
             creator = "My Creatoris Azeemushan Ali. Connect with him on Linkedin "
             speak(creator)
+#            speak('Launching your results in Chrome')
             webbrowser.open('https://www.linkedin.com/in/azeemushan-ali/')
         elif ('send email' in command):
             try:
@@ -99,10 +103,11 @@ if __name__ == "__main__":
             except Exception as e:
                 print(e)
                 speak("Sorry Sir !! . I am not able to send this email right now.Please try again later") 
-        elif 'shutup' in command or 'shutdown' in command or 'shut down' in command:
+        elif 'quit' in command or 'exit' in command or 'shutup' in command or 'shutdown' in command or 'shut down' in command:
             speak("I hope you liked me Sir!!")
             speak('I am closing my services and shutting down')
             speak('Have a nice day')
+            state = 'exit'
         elif 'help' in command:
             help_str= 'You want help for which command?'
             speak(help_str)
@@ -161,24 +166,10 @@ if __name__ == "__main__":
         elif 'the time' in command:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        else:
+            el_str = "I have no idea what you are saying. Kindly try taking help by inputting help"
+            print(el_str)
+            speak(el_str)
     
     
     
