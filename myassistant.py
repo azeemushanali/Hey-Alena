@@ -13,13 +13,14 @@ import wikipedia
 import webbrowser
 from bs4 import BeautifulSoup as soup 
 from urllib.request import urlopen
+import time
 
 
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
-# print(voices[1].id)
-engine.setProperty('voice', voices[0].id)
+# print(voices[1].id) 0-->male 1-->female
+engine.setProperty('voice', voices[1].id) 
 
 
 def speak(audio):
@@ -53,8 +54,8 @@ def wishMe():
         print("Good Evening! Azeemushan Ali")  
         speak("Good Evening! Azeemushan Ali")  
 
-    print("I am Frank Sir. Please tell me how may I help you")
-    speak("I am Frank Sir. Please tell me how may I help you")
+    print("I am Alena Sir. Please tell me how may I help you")
+    speak("I am Alena Sir. Please tell me how may I help you")
     
 #speak('Hello World')
 def sendEmail(to, content):
@@ -99,12 +100,14 @@ if __name__ == "__main__":
             url = "https://www.youtube.com/results?search_query="
             speak('Launching your results in Chrome')
             webbrowser.open(url+command)
+            time.sleep(5)
         elif 'search' in command and 'stackoverflow' in command:
             command = command.replace('search ','')
             command = command.replace('in stackoverflow','')
             url = "https://stackoverflow.com/search?q="
             speak('Launching your results in Chrome')
             webbrowser.open(url+command)
+            time.sleep(5)
         elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and 'chrome' in command:
             path = '"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"'
             os.system(path)
@@ -114,21 +117,23 @@ if __name__ == "__main__":
             os.system('code')
         elif 'creator' in command:
             creator = "My Creator is Azeemushan Ali. Connect with him on Linkedin "
+            print(creator)
             speak(creator)
 #            speak('Launching your results in Chrome')
             webbrowser.open('https://www.linkedin.com/in/azeemushan-ali/')
+            time.sleep(5)
         elif ('send email' in command):
             try:
                 speak("What should I say?")
                 content = input("What should I say?\n")
                 speak("Please Enter the recipient email!")
                 to = input("Please Enter the recipient email!\n")    
-                sendEmail(to, content)
+                #sendEmail(to, content)
                 speak("Email has been sent!")
             except Exception as e:
                 print(e)
                 speak("Sorry Sir !! . I am not able to send this email right now.Please try again later") 
-        elif 'quit' in command or 'exit' in command or 'shutup' in command or 'shutdown' in command or 'shut down' in command:
+        elif 'quit' in command or 'exit' in command or 'shutup' in command or 'shutdown' in command or 'shut down' in command or 'shut up' in command:
             speak("I hope you liked me Sir!!")
             speak('I am closing my services and shutting down')
             speak('Have a nice day')
@@ -157,10 +162,10 @@ if __name__ == "__main__":
                 print(news_str)
                 speak(news_str)
             elif 'email' in help_cmd:
-                email_str = "Send Email command works like this - \n\
-                Input 'Send Email' or 'I want to send email' and you will hear \
-                me to ask for the email content. Enter the email content \
-                and then I will ask you to whom you want to send email? \
+                email_str = "Send Email command works like this - \n \
+                Input 'Send Email' or 'I want to send email' and you will hear \n \
+                me to ask for the email content. Enter the email content \n\
+                and then I will ask you to whom you want to send email? \n\
                 Enter the email id of recipient and email will be sent !!"
                 print(email_str)
                 speak(email_str) 
@@ -186,9 +191,9 @@ if __name__ == "__main__":
                 speak(chr_str)
             elif 'time' in help_cmd:
                 chr_str = "Time command works like this - \n\
-                Input 'What is the time' or \
-                'Please tell me the time' or \
-                'will you please tell what time it is?'\
+                Input 'What is the time' or \n \
+                'Please tell me the time' or \n \
+                'will you please tell what time it is?'\n \
                 and you will hear me saying the excact time soon "
                 print(chr_str)
                 speak(chr_str)
