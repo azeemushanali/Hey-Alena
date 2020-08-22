@@ -11,6 +11,11 @@ import datetime
 import smtplib
 import wikipedia
 import webbrowser
+from bs4 import BeautifulSoup as soup 
+from urllib.request import urlopen
+
+
+
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 # print(voices[1].id)
@@ -20,20 +25,36 @@ engine.setProperty('voice', voices[0].id)
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
-
+def newsRead():
+    site = 'https://news.google.com/news/rss'
+    op = urlopen(site)
+    read = op.read()
+    op.close()
+    soup_page  = soup(read,'xml')
+    news_list = soup_page.findAll('item')
+    for  news in news_list[:8]:
+        print(news.title.text)
+        speak(news.title.text)
+        #print(news.link.text)
+        print(news.pubDate.text)
+        print("--"*50)
 
 def wishMe():
     hour = int(datetime.datetime.now().hour)
     if hour>=0 and hour<12:
+        print("Good Morning! Azeemushan Ali")
         speak("Good Morning! Azeemushan Ali")
 
     elif hour>=12 and hour<18:
+        print("Good Afternoon! Azeemushan Ali")   
         speak("Good Afternoon! Azeemushan Ali")   
 
     else:
+        print("Good Evening! Azeemushan Ali")  
         speak("Good Evening! Azeemushan Ali")  
 
-    speak("I am Jarvis Sir. Please tell me how may I help you")
+    print("I am Frank Sir. Please tell me how may I help you")
+    speak("I am Frank Sir. Please tell me how may I help you")
     
 #speak('Hello World')
 def sendEmail(to, content):
@@ -44,17 +65,17 @@ def sendEmail(to, content):
     server.sendmail('youremail@gmail.com', to, content)
     server.close()
     
-#def initialise_win_env():
-#    os.system('pwd')
-#    os.popen('dir')
+def icoulddo():
+    icoulddo = "I could do following - \n*Open Chrome,Notepad,VS Code IDE\n*Send Email\n*Play Songs for you\n*Search anything in wikipedia or Youtube or Stack Overflow\n*Tell you today's News\n*Tell about my creator\n*Tell you about date & time\n*Ask What do you do? or ask for help anytime"
+    print(icoulddo)
+    speak(icoulddo.replace('*',' '))
+        
     
 if __name__ == "__main__":
-#    wishMe()
-    icoulddo = "I could do following - \n*Open Chrome\n*Open Notepad\n*Open Your VS Code IDE\n*Send Email\n*Search anything in wikipedia\n*Search anything in Youtube"
+    wishMe()
+    icoulddo()
     state = 'in'
     while state == 'in':
-        print(icoulddo)
-        speak(icoulddo.replace('*',' '))
         print("So what do you want me to do?")
         speak("So what do you want me to do?")
         command = input().lower()
@@ -68,6 +89,10 @@ if __name__ == "__main__":
             speak("According to Wikipedia")
             print(results)
             speak(results)
+        elif ('what you do' or 'what do you do') in command:
+            icoulddo()
+        elif 'news' in command:
+            newsRead()
         elif 'youtube' in command and 'search' in command:
             command = command.replace('search ','')
             command = command.replace('in youtube','')
@@ -88,7 +113,7 @@ if __name__ == "__main__":
         elif ( 'launch' in command or 'execute' in command or 'run' in command or 'open' in command ) and ('ide' in command or 'vs code'in command or 'code' in command or 'vscode'in command ):
             os.system('code')
         elif 'creator' in command:
-            creator = "My Creatoris Azeemushan Ali. Connect with him on Linkedin "
+            creator = "My Creator is Azeemushan Ali. Connect with him on Linkedin "
             speak(creator)
 #            speak('Launching your results in Chrome')
             webbrowser.open('https://www.linkedin.com/in/azeemushan-ali/')
@@ -127,6 +152,10 @@ if __name__ == "__main__":
                 Input 'Search how to solve index out of bound in stackoverflow' and you will see your results opening soon "
                 print(yt_str)
                 speak(yt_str)
+            elif 'news' in help_cmd:
+                news_str = "Input 'Tell me todays news' or 'Read today's news' and you will hear the news soon  "
+                print(news_str)
+                speak(news_str)
             elif 'email' in help_cmd:
                 email_str = "Send Email command works like this - \n\
                 Input 'Send Email' or 'I want to send email' and you will hear \
@@ -163,6 +192,9 @@ if __name__ == "__main__":
                 and you will hear me saying the excact time soon "
                 print(chr_str)
                 speak(chr_str)
+            else:
+                print("Please try with valid reason")
+                speak("Please try with valid reason")
         elif 'the time' in command:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")    
             speak(f"Sir, the time is {strTime}")
